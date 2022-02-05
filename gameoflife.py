@@ -6,7 +6,7 @@
 #    By: mae <maeyener@gmail.com>                   ...   C)  A____A           #
 #                                                   :.:  ((  ( . w . )  .:.    #
 #    Created: 2022/02/03 21:31:19 by mae               .:::::::U::::U:::       #
-#    Updated: 2022/02/04 18:07:22 by mae                ..   :.: . . .:: :.    #
+#    Updated: 2022/02/05 01:34:24 by mae                ..   :.: . . .:: :.    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,16 +14,14 @@ import sys
 import time
 import random
 import numpy as np
-import matplotlib.pyplot as plt 
-import matplotlib.animation as animation
+import pygame
 
 class Game:
 
-	def __init__(self, width, height, generations):
+	def __init__(self, width, height):
 
 		self.height = height 
 		self.width = width
-		self.generations = generations
 		self.grid = np.zeros(width*height, dtype='int').reshape(width, height)
 
 	def init_grid(self):
@@ -31,7 +29,7 @@ class Game:
 		# Plug the 1's like so to control distribution ratio
 		for i in range(0, self.width):
 			for j in range(0, self.height):
-				if random.randint(0, 100) < 20:
+				if random.randint(0, 100) < 10:
 					self.grid[i][j] = 1
 				else:
 					self.grid[i][j] = 0
@@ -56,35 +54,47 @@ class Game:
 		
 		return (live_neighbors)
 
-	def	update(self, args=None):
+	def update(self, screen):
+		
 		for i in range(0, self.width):
 			for j in range(0, self.height):
+				
 				live = self.count_live_neighbors(i, j)
-				#print(live)
+
 				if self.grid[i][j] == 1 and (live > 3 or live < 2):
 					self.grid[i][j] = 0
 				elif self.grid[i][j] == 0 and live == 3:
 					self.grid[i][j] = 1
-				# Placeholder
-				else:
-					pass
+
+				if self.grid[i][j] == 1:
+					pygame.draw.rect(screen, (255, 255, 255), [(i * 5), (j * 5), 5, 5])
+
 		return (self.grid)		
 
 	def run(self):
 
-		#fig, ax = plt.subplots( )
-		#img = ax.imshow(self.grid, interpolation='nearest' )
-		#ani = animation.FuncAnimation( fig, func=self.update, 
-		#						frames=self.generations, init_func=self.init_grid)
-		#plt.show()
+		pygame.init()
+		screen = pygame.display.set_mode((self.width, self.height))
+		clock = pygame.time.Clock()
+		pygame.display.set_caption("John Conway's Game of Life")
 
-		i = 1
 		self.grid = self.init_grid()
-		print(self.grid, "\n\n\n")
-		while i < self.generations:
-			self.grid = self.update()
-			print(self.grid, "\n\n\n")
-			time.sleep(1)
+		# print(self.grid, "\n\n\n")
+		
+		while True:
+			clock.tick(60)
+			screen.fill((0, 0, 0))
 
-test = Game(10, 10, 5)
+			for event in pygame.event.get():
+				if event.type == pygame.QUIT:
+					pygame.quit()
+					sys.exit()
+			
+			# self.draw_grid(screen)
+			self.grid = self.update(screen)
+
+			pygame.display.update()
+
+
+test = Game(500, 500)
 test.run()

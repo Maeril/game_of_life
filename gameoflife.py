@@ -6,26 +6,24 @@
 #    By: mae <maeyener@gmail.com>                   ...   C)  A____A           #
 #                                                   :.:  ((  ( . w . )  .:.    #
 #    Created: 2022/02/03 21:31:19 by mae               .:::::::U::::U:::       #
-#    Updated: 2022/02/05 01:34:24 by mae                ..   :.: . . .:: :.    #
+#    Updated: 2022/02/05 02:49:43 by mae                ..   :.: . . .:: :.    #
 #                                                                              #
 # **************************************************************************** #
 
-import sys
-import time
-import random
 import numpy as np
-import pygame
+import pygame as pg
+import random
+import sys
 
-class Game:
+class GameOfLife:
 
-	def __init__(self, width, height):
+	def __init__(self, w, h):
 
-		self.height = height 
-		self.width = width
-		self.grid = np.zeros(width*height, dtype='int').reshape(width, height)
-
-	def init_grid(self):
+		self.height = h
+		self.width = w
+		self.grid = np.zeros((w * h), dtype='int').reshape(w, h)
 				
+		# Init the base grid.
 		# Plug the 1's like so to control distribution ratio
 		for i in range(0, self.width):
 			for j in range(0, self.height):
@@ -33,25 +31,22 @@ class Game:
 					self.grid[i][j] = 1
 				else:
 					self.grid[i][j] = 0
-		return (self.grid)
 					
 	def count_live_neighbors(self, i, j):
 		
 		live_neighbors = 0
-		# We put "+ 2" instead of "+ 1" bc range() is exclusive
-		for x in range(i - 1 , i + 2):
-			for y in range(j - 1, j + 2):
-				if x == i and y == j:
-					continue
-				if x != self.width and y != self.height:
-					live_neighbors += self.grid[x][y]
-				elif x == self.width and y != self.height:
-					live_neighbors += self.grid[0][y]
-				elif x != self.width and y == self.height:
-					live_neighbors += self.grid[x][0]
-				else:
-					live_neighbors += self.grid[0][0]
-		
+
+		# Create a contextual map of the neighbors.
+		# Skip (0, 0) as it indicates current position, i.e. not a neighbor.
+		neighbor_map = [(-1, -1), (-1, 0), (-1, 1), 
+						(0, -1), (0, 1), 
+						(1, -1), (1, 0), (1, 1)]
+	
+		# Using the remainder operation '%' allows us to find our way in that 
+		# "local neighbor map" contextually.
+		for _i, _j in neighbor_map:
+			if self.grid[(i + _i) % self.width][(j + _j) % self.height]:
+				live_neighbors += 1
 		return (live_neighbors)
 
 	def update(self, screen):
@@ -61,40 +56,39 @@ class Game:
 				
 				live = self.count_live_neighbors(i, j)
 
+				# Apply Conway's
 				if self.grid[i][j] == 1 and (live > 3 or live < 2):
 					self.grid[i][j] = 0
 				elif self.grid[i][j] == 0 and live == 3:
 					self.grid[i][j] = 1
 
+				# Display the live cell
 				if self.grid[i][j] == 1:
-					pygame.draw.rect(screen, (255, 255, 255), [(i * 5), (j * 5), 5, 5])
+					pg.draw.rect(screen, (255, 255, 255),
+									[(i * 5), (j * 5), 5, 5])
 
 		return (self.grid)		
 
 	def run(self):
 
-		pygame.init()
-		screen = pygame.display.set_mode((self.width, self.height))
-		clock = pygame.time.Clock()
-		pygame.display.set_caption("John Conway's Game of Life")
+		pg.init()
+		screen = pg.display.set_mode((self.width, self.height))
+		clock = pg.time.Clock()
+		pg.display.set_caption("John Conway's Game of Life")
 
-		self.grid = self.init_grid()
-		# print(self.grid, "\n\n\n")
-		
 		while True:
 			clock.tick(60)
 			screen.fill((0, 0, 0))
 
-			for event in pygame.event.get():
-				if event.type == pygame.QUIT:
-					pygame.quit()
+			for event in pg.event.get():
+				if event.type == pg.QUIT:
+					pg.quit()
 					sys.exit()
 			
-			# self.draw_grid(screen)
 			self.grid = self.update(screen)
 
-			pygame.display.update()
+			pg.display.update()
 
 
-test = Game(500, 500)
-test.run()
+Game = GameOfLife(400, 600)
+Game.run()

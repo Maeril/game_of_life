@@ -11,3 +11,6 @@ Then, launch the game using:
 ```
 python3 gameoflife.py
 ```
+
+## Note
+Feel free to play with the game window dimensions and cell scale: it might yield interesting results.

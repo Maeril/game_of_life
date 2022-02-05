@@ -6,7 +6,7 @@
 #    By: mae <maeyener@gmail.com>                   ...   C)  A____A           #
 #                                                   :.:  ((  ( . w . )  .:.    #
 #    Created: 2022/02/03 21:31:19 by mae               .:::::::U::::U:::       #
-#    Updated: 2022/02/05 02:49:43 by mae                ..   :.: . . .:: :.    #
+#    Updated: 2022/02/05 03:10:36 by mae                ..   :.: . . .:: :.    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -64,7 +64,7 @@ class GameOfLife:
 
 				# Display the live cell
 				if self.grid[i][j] == 1:
-					pg.draw.rect(screen, (255, 255, 255),
+					pg.draw.rect(screen, (255, 237, 105),
 									[(i * 5), (j * 5), 5, 5])
 
 		return (self.grid)		
@@ -78,7 +78,7 @@ class GameOfLife:
 
 		while True:
 			clock.tick(60)
-			screen.fill((0, 0, 0))
+			screen.fill((41, 5, 59))
 
 			for event in pg.event.get():
 				if event.type == pg.QUIT:

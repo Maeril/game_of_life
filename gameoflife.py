@@ -6,7 +6,7 @@
 #    By: mae <maeyener@gmail.com>                   ...   C)  A____A           #
 #                                                   :.:  ((  ( . w . )  .:.    #
 #    Created: 2022/02/03 21:31:19 by mae               .:::::::U::::U:::       #
-#    Updated: 2022/02/05 03:25:04 by mae                ..   :.: . . .:: :.    #
+#    Updated: 2022/02/07 02:08:56 by mae                ..   :.: . . .:: :.    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,7 +38,6 @@ class GameOfLife:
 	def count_live_neighbors(self, i, j):
 		
 		live_neighbors = 0
-
 		# Create a contextual map of the neighbors.
 		# Skip (0, 0) as it indicates current position, 
 		# i.e. not a neighbor.
@@ -55,22 +54,29 @@ class GameOfLife:
 
 	def update(self, screen):
 		
+		# Here, we create a second grid to edit while preserving 
+		# the original one until the end of the loop.
+		new_grid = self.grid.copy()
+	
 		for i in range(0, self.w):
 			for j in range(0, self.h):
 				
 				l = self.count_live_neighbors(i, j)
-
+				
 				# Apply Conway's rules
 				if self.grid[i][j] == 1 and (l > 3 or l < 2):
-					self.grid[i][j] = 0
+					new_grid[i][j] = 0
 				elif self.grid[i][j] == 0 and l == 3:
-					self.grid[i][j] = 1
+					new_grid[i][j] = 1
 
 				# Display the live cell
-				if self.grid[i][j] == 1:
+				if new_grid[i][j] == 1:
 					pg.draw.rect(screen, (255, 237, 105),
 						[(i * self.s), (j * self.s), 
 						self.s - 1, self.s - 1])
+
+		# The new grid replaces the precedent one.
+		self.grid = new_grid.copy()
 
 	def run(self):
 

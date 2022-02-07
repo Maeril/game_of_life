@@ -6,7 +6,7 @@
 #    By: mae <maeyener@gmail.com>                   ...   C)  A____A           #
 #                                                   :.:  ((  ( . w . )  .:.    #
 #    Created: 2022/02/03 21:31:19 by mae               .:::::::U::::U:::       #
-#    Updated: 2022/02/07 02:08:56 by mae                ..   :.: . . .:: :.    #
+#    Updated: 2022/02/07 02:19:11 by mae                ..   :.: . . .:: :.    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -71,6 +71,8 @@ class GameOfLife:
 
 				# Display the live cell
 				if new_grid[i][j] == 1:
+					# I suspect the way (and place) I draw cells
+					# to be responsible for the performance issues.
 					pg.draw.rect(screen, (255, 237, 105),
 						[(i * self.s), (j * self.s), 
 						self.s - 1, self.s - 1])

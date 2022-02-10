@@ -6,7 +6,7 @@
 #    By: mae <maeyener@gmail.com>                   ...   C)  A____A           #
 #                                                   :.:  ((  ( . w . )  .:.    #
 #    Created: 2022/02/03 21:31:19 by mae               .:::::::U::::U:::       #
-#    Updated: 2022/02/10 18:51:38 by mae                ..   :.: . . .:: :.    #
+#    Updated: 2022/02/10 18:53:29 by mae                ..   :.: . . .:: :.    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -59,7 +59,6 @@ class GameOfLife:
 
 		pg.init()
 		screen = pg.display.set_mode((self.w, self.h))
-		surf = pg.Surface((self.w, self.h))
 		clock = pg.time.Clock()
 		pg.display.set_caption("John Conway's Game of Life")
 

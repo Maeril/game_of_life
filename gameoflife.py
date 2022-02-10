@@ -6,7 +6,7 @@
 #    By: mae <maeyener@gmail.com>                   ...   C)  A____A           #
 #                                                   :.:  ((  ( . w . )  .:.    #
 #    Created: 2022/02/03 21:31:19 by mae               .:::::::U::::U:::       #
-#    Updated: 2022/02/10 17:59:52 by mae                ..   :.: . . .:: :.    #
+#    Updated: 2022/02/10 18:51:38 by mae                ..   :.: . . .:: :.    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -49,7 +49,8 @@ class GameOfLife:
 			for j in range(0, self.h):
 
 				# Apply Conway's rules
-				if self.grid[i][j] == 1 and (self.neighbor_map[i][j] > 3 or self.neighbor_map[i][j] < 2):
+				if self.grid[i][j] == 1 and (self.neighbor_map[i][j] > 3 
+					or self.neighbor_map[i][j] < 2):
 					self.grid[i][j] = 0
 				elif self.grid[i][j] == 0 and self.neighbor_map[i][j] == 3:
 					self.grid[i][j] = 1
@@ -69,7 +70,12 @@ class GameOfLife:
 					pg.quit()
 					sys.exit()
 
-			surf = pg.surfarray.make_surface(self.grid)
+			# The cell value defines color. We change "1" to "97" to display a
+			# more visible pink instead of the blue "1" yields.
+			c_grid = self.grid.copy()
+			c_grid[c_grid == 1] = 97
+			
+			surf = pg.surfarray.make_surface(c_grid)
 			screen.blit(surf, (0,0))
 			pg.display.flip()
 

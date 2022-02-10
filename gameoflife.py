@@ -6,7 +6,7 @@
 #    By: mae <maeyener@gmail.com>                   ...   C)  A____A           #
 #                                                   :.:  ((  ( . w . )  .:.    #
 #    Created: 2022/02/03 21:31:19 by mae               .:::::::U::::U:::       #
-#    Updated: 2022/02/10 17:55:48 by mae                ..   :.: . . .:: :.    #
+#    Updated: 2022/02/10 17:59:52 by mae                ..   :.: . . .:: :.    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,14 +40,11 @@ class GameOfLife:
 
 		kernel = np.ones((3 * 3), dtype="int").reshape(3, 3)
 		kernel[1, 1] = 0
-		# print (kernel, "\n", self.grid)
 		self.neighbor_map = signal.convolve2d(self.grid, kernel)[1:-1, 1:-1]
-		# print(self.neighbor_map)
 
 
 	def update(self):
 
-		self.map_live_neighbors()
 		for i in range(0, self.w):
 			for j in range(0, self.h):
 
@@ -76,6 +73,7 @@ class GameOfLife:
 			screen.blit(surf, (0,0))
 			pg.display.flip()
 
+			self.map_live_neighbors()
 			self.update()
 			clock.tick()
 
